@@ -1,0 +1,73 @@
+ion-content {
+  --background: var(--ion-background-color);
+  max-width: 620px;
+  margin: 0 auto;
+}
+
+#anotacoes {
+  background: var(--ion-card-background);
+  border-radius: 20px;
+  padding: 24px 20px;
+  margin: 20px 16px 0 16px;
+  border: 1px solid var(--pardal-border);
+  box-shadow: var(--pardal-shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  ion-item {
+    --background: var(--pardal-input-bg);
+    --color: var(--ion-text-color);
+    --border-radius: 14px;
+    --padding-start: 16px;
+    --padding-end: 16px;
+    --padding-top: 8px;
+    --padding-bottom: 8px;
+    border-radius: 14px;
+    border: 1px solid var(--pardal-input-border);
+    transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+
+    &:focus-within {
+      --background: var(--pardal-input-focus);
+      border-color: var(--pardal-accent);
+      box-shadow: 0 0 0 3px rgba(86, 99, 63, 0.18);
+    }
+
+    ion-label {
+      font-family: var(--pardal-font-sans);
+      font-weight: 700;
+      color: var(--pardal-accent-text);
+      margin-bottom: 8px;
+    }
+
+    ion-input {
+      font-family: var(--pardal-font-sans);
+      font-size: 1rem;
+      --padding-top: 6px;
+      --padding-bottom: 6px;
+    }
+  }
+
+  ion-button {
+    --background: var(--pardal-btn-primary-bg);
+    --background-hover: var(--pardal-btn-primary-hover);
+    --background-activated: var(--pardal-btn-primary-hover);
+    --color: var(--pardal-btn-primary-text);
+    --border-radius: 14px;
+    --box-shadow: var(--pardal-shadow-accent);
+    font-family: var(--pardal-font-sans);
+    font-weight: 700;
+    min-block-size: 3rem;
+    margin-top: 8px;
+    letter-spacing: 0.03em;
+    transition: filter 0.2s ease, transform 0.15s ease;
+
+    &:hover {
+      filter: brightness(1.04);
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+}

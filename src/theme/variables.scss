@@ -1,0 +1,319 @@
+// For information on how to create your own theme, please refer to:
+// https://ionicframework.com/docs/theming/
+
+:root,
+:root.ios,
+:root.md {
+  color-scheme: light dark;
+
+  /* Paleta base */
+  --pardal-creme: #f5ead8;
+  --pardal-areia: #ebddc5;
+  --pardal-poeira: #dcd3c4;
+  --pardal-musgo: #2f3626;
+  --pardal-sage: #56633f;
+  --pardal-sage-escuro: #3d472b;
+  --pardal-terracota: #b2622d;
+
+  /* Variações para contraste e tema escuro */
+  --pardal-musgo-fundo: #22281b;
+  --pardal-borda-escura: #454e38;
+  --pardal-sage-claro: #a6b687;
+  --pardal-terracota-texto: #964b1c;
+  --pardal-terracota-badge: #ad5e29;
+  --pardal-terracota-claro: #e0925c;
+
+  /* Fontes */
+  --pardal-font-display: 'Caprasimo', Georgia, 'Times New Roman', serif;
+  --pardal-font-sans: 'Figtree', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  --ion-font-family: var(--pardal-font-sans);
+  --ion-default-font: var(--pardal-font-sans);
+
+  /* Tokens de tema (claro / escuro) */
+  --pardal-bg-light: var(--pardal-creme);
+  --pardal-bg-dark: var(--pardal-musgo-fundo);
+
+  --pardal-surface-light: var(--pardal-areia);
+  --pardal-surface-dark: var(--pardal-musgo);
+
+  --pardal-surface-inset-light: var(--pardal-creme);
+  --pardal-surface-inset-dark: #272d1f;
+
+  --pardal-input-bg-light: #faf2e4;
+  --pardal-input-bg-dark: #202619;
+
+  --pardal-input-focus-light: #ffffff;
+  --pardal-input-focus-dark: #262d1e;
+
+  --pardal-surface-hover-light: #efe2cb;
+  --pardal-surface-hover-dark: #373f2d;
+
+  --pardal-border-light: var(--pardal-poeira);
+  --pardal-border-dark: var(--pardal-borda-escura);
+
+  /* Borda dos campos de entrada */
+  --pardal-input-border-light: #7a806f;
+  --pardal-input-border-dark: #8d9481;
+
+  --pardal-text-light: var(--pardal-musgo);
+  --pardal-text-dark: var(--pardal-creme);
+
+  --pardal-text-muted-light: var(--pardal-sage-escuro);
+  --pardal-text-muted-dark: var(--pardal-poeira);
+
+  --pardal-accent-light: var(--pardal-sage);
+  --pardal-accent-dark: var(--pardal-sage-claro);
+
+  --pardal-accent-text-light: var(--pardal-sage-escuro);
+  --pardal-accent-text-dark: var(--pardal-sage-claro);
+
+  --pardal-highlight-bg-light: var(--pardal-terracota-badge);
+  --pardal-highlight-bg-dark: var(--pardal-terracota-claro);
+
+  --pardal-highlight-text-on-bg-light: #ffffff;
+  --pardal-highlight-text-on-bg-dark: var(--pardal-musgo-fundo);
+
+  --pardal-danger-text-light: var(--pardal-terracota-texto);
+  --pardal-danger-text-dark: var(--pardal-terracota-claro);
+
+  --pardal-btn-primary-bg-light: var(--pardal-sage);
+  --pardal-btn-primary-bg-dark: var(--pardal-sage-claro);
+  --pardal-btn-primary-hover-light: var(--pardal-sage-escuro);
+  --pardal-btn-primary-hover-dark: #b7c69a;
+  --pardal-btn-primary-text-light: var(--pardal-creme);
+  --pardal-btn-primary-text-dark: var(--pardal-musgo-fundo);
+
+  --pardal-disabled-bg-light: var(--pardal-poeira);
+  --pardal-disabled-bg-dark: #3b4331;
+  --pardal-disabled-text-light: var(--pardal-musgo);
+  --pardal-disabled-text-dark: var(--pardal-poeira);
+
+  /* Aplicação padrão (tema claro) */
+  --pardal-bg: var(--pardal-bg-light);
+  --pardal-surface: var(--pardal-surface-light);
+  --pardal-surface-inset: var(--pardal-surface-inset-light);
+  --pardal-input-bg: var(--pardal-input-bg-light);
+  --pardal-input-focus: var(--pardal-input-focus-light);
+  --pardal-surface-hover: var(--pardal-surface-hover-light);
+  --pardal-border: var(--pardal-border-light);
+  --pardal-input-border: var(--pardal-input-border-light);
+  --pardal-text: var(--pardal-text-light);
+  --pardal-text-muted: var(--pardal-text-muted-light);
+  --pardal-accent: var(--pardal-accent-light);
+  --pardal-accent-text: var(--pardal-accent-text-light);
+  --pardal-highlight-bg: var(--pardal-highlight-bg-light);
+  --pardal-highlight-on-bg: var(--pardal-highlight-text-on-bg-light);
+  --pardal-danger-text: var(--pardal-danger-text-light);
+  --pardal-btn-primary-bg: var(--pardal-btn-primary-bg-light);
+  --pardal-btn-primary-hover: var(--pardal-btn-primary-hover-light);
+  --pardal-btn-primary-text: var(--pardal-btn-primary-text-light);
+  --pardal-disabled-bg: var(--pardal-disabled-bg-light);
+  --pardal-disabled-text: var(--pardal-disabled-text-light);
+  --pardal-shadow: 0 6px 18px -4px rgba(47, 54, 38, 0.1);
+  --pardal-shadow-accent: 0 8px 20px -4px rgba(61, 71, 43, 0.28);
+
+  /* Variáveis do Ionic (tema claro) */
+  --ion-background-color: var(--pardal-bg);
+  --ion-background-color-rgb: 245, 234, 216;
+
+  --ion-text-color: var(--pardal-text);
+  --ion-text-color-rgb: 47, 54, 38;
+
+  --ion-card-background: var(--pardal-surface);
+  --ion-item-background: var(--pardal-surface);
+  --ion-toolbar-background: var(--pardal-surface);
+  --ion-toolbar-color: var(--pardal-text);
+  --ion-toolbar-border-color: var(--pardal-border);
+  --ion-border-color: var(--pardal-border);
+  --ion-tab-bar-background: var(--pardal-surface);
+
+  --ion-color-primary: #56633f;
+  --ion-color-primary-rgb: 86, 99, 63;
+  --ion-color-primary-contrast: #f5ead8;
+  --ion-color-primary-contrast-rgb: 245, 234, 216;
+  --ion-color-primary-shade: #3d472b;
+  --ion-color-primary-tint: #6a7851;
+
+  --ion-color-secondary: #b2622d;
+  --ion-color-secondary-rgb: 178, 98, 45;
+  --ion-color-secondary-contrast: #ffffff;
+  --ion-color-secondary-contrast-rgb: 255, 255, 255;
+  --ion-color-secondary-shade: #964b1c;
+  --ion-color-secondary-tint: #c0723e;
+
+  --ion-color-tertiary: #2f3626;
+  --ion-color-tertiary-rgb: 47, 54, 38;
+  --ion-color-tertiary-contrast: #f5ead8;
+  --ion-color-tertiary-contrast-rgb: 245, 234, 216;
+  --ion-color-tertiary-shade: #252b1e;
+  --ion-color-tertiary-tint: #414937;
+
+  --ion-color-success: #3d472b;
+  --ion-color-success-rgb: 61, 71, 43;
+  --ion-color-success-contrast: #f5ead8;
+  --ion-color-success-contrast-rgb: 245, 234, 216;
+  --ion-color-success-shade: #2f3626;
+  --ion-color-success-tint: #56633f;
+
+  --ion-color-warning: #b2622d;
+  --ion-color-warning-rgb: 178, 98, 45;
+  --ion-color-warning-contrast: #ffffff;
+  --ion-color-warning-contrast-rgb: 255, 255, 255;
+  --ion-color-warning-shade: #964b1c;
+  --ion-color-warning-tint: #c0723e;
+
+  --ion-color-danger: #964b1c;
+  --ion-color-danger-rgb: 150, 75, 28;
+  --ion-color-danger-contrast: #f5ead8;
+  --ion-color-danger-contrast-rgb: 245, 234, 216;
+  --ion-color-danger-shade: #803e15;
+  --ion-color-danger-tint: #b2622d;
+
+  --ion-color-medium: #3d472b;
+  --ion-color-medium-rgb: 61, 71, 43;
+  --ion-color-medium-contrast: #f5ead8;
+  --ion-color-medium-contrast-rgb: 245, 234, 216;
+  --ion-color-medium-shade: #2f3626;
+  --ion-color-medium-tint: #56633f;
+
+  --ion-color-light: #ebddc5;
+  --ion-color-light-rgb: 235, 221, 197;
+  --ion-color-light-contrast: #2f3626;
+  --ion-color-light-contrast-rgb: 47, 54, 38;
+  --ion-color-light-shade: #dcd3c4;
+  --ion-color-light-tint: #f5ead8;
+
+  --ion-color-dark: #2f3626;
+  --ion-color-dark-rgb: 47, 54, 38;
+  --ion-color-dark-contrast: #f5ead8;
+  --ion-color-dark-contrast-rgb: 245, 234, 216;
+  --ion-color-dark-shade: #22281b;
+  --ion-color-dark-tint: #3d472b;
+
+  accent-color: var(--pardal-accent);
+  scrollbar-color: var(--pardal-accent) var(--pardal-bg);
+
+  /* Tema escuro */
+  @media (prefers-color-scheme: dark) {
+    --pardal-bg: var(--pardal-bg-dark);
+    --pardal-surface: var(--pardal-surface-dark);
+    --pardal-surface-inset: var(--pardal-surface-inset-dark);
+    --pardal-input-bg: var(--pardal-input-bg-dark);
+    --pardal-input-focus: var(--pardal-input-focus-dark);
+    --pardal-surface-hover: var(--pardal-surface-hover-dark);
+    --pardal-border: var(--pardal-border-dark);
+    --pardal-input-border: var(--pardal-input-border-dark);
+    --pardal-text: var(--pardal-text-dark);
+    --pardal-text-muted: var(--pardal-text-muted-dark);
+    --pardal-accent: var(--pardal-accent-dark);
+    --pardal-accent-text: var(--pardal-accent-text-dark);
+    --pardal-highlight-bg: var(--pardal-highlight-bg-dark);
+    --pardal-highlight-on-bg: var(--pardal-highlight-text-on-bg-dark);
+    --pardal-danger-text: var(--pardal-danger-text-dark);
+    --pardal-btn-primary-bg: var(--pardal-btn-primary-bg-dark);
+    --pardal-btn-primary-hover: var(--pardal-btn-primary-hover-dark);
+    --pardal-btn-primary-text: var(--pardal-btn-primary-text-dark);
+    --pardal-disabled-bg: var(--pardal-disabled-bg-dark);
+    --pardal-disabled-text: var(--pardal-disabled-text-dark);
+    --pardal-shadow: 0 10px 24px -6px rgba(0, 0, 0, 0.35);
+    --pardal-shadow-accent: 0 8px 20px -4px rgba(0, 0, 0, 0.4);
+
+    --ion-background-color: var(--pardal-bg-dark);
+    --ion-background-color-rgb: 34, 40, 27;
+
+    --ion-text-color: var(--pardal-creme);
+    --ion-text-color-rgb: 245, 234, 216;
+
+    --ion-card-background: var(--pardal-musgo);
+    --ion-item-background: var(--pardal-musgo);
+    --ion-toolbar-background: var(--pardal-musgo);
+    --ion-toolbar-color: var(--pardal-creme);
+    --ion-toolbar-border-color: var(--pardal-borda-escura);
+    --ion-border-color: var(--pardal-borda-escura);
+    --ion-tab-bar-background: var(--pardal-musgo);
+
+    --ion-background-color-step-50: #293021;
+    --ion-background-color-step-100: #2f3626;
+    --ion-background-color-step-150: #39412f;
+    --ion-background-color-step-200: #454e38;
+    --ion-background-color-step-250: #525c44;
+
+    --ion-text-color-step-50: #efe4d1;
+    --ion-text-color-step-100: #ebddc5;
+    --ion-text-color-step-150: #dcd3c4;
+    --ion-text-color-step-200: #c8bfae;
+
+    /* Ajuste de destaque para fundo escuro */
+    --ion-color-primary: #a6b687;
+    --ion-color-primary-rgb: 166, 182, 135;
+    --ion-color-primary-contrast: #22281b;
+    --ion-color-primary-contrast-rgb: 34, 40, 27;
+    --ion-color-primary-shade: #93a474;
+    --ion-color-primary-tint: #b7c69a;
+
+    --ion-color-secondary: #e0925c;
+    --ion-color-secondary-rgb: 224, 146, 92;
+    --ion-color-secondary-contrast: #22281b;
+    --ion-color-secondary-contrast-rgb: 34, 40, 27;
+    --ion-color-secondary-shade: #ca804d;
+    --ion-color-secondary-tint: #e8a475;
+
+    --ion-color-success: #a6b687;
+    --ion-color-success-rgb: 166, 182, 135;
+    --ion-color-success-contrast: #22281b;
+    --ion-color-success-contrast-rgb: 34, 40, 27;
+    --ion-color-success-shade: #93a474;
+    --ion-color-success-tint: #b7c69a;
+
+    --ion-color-warning: #e0925c;
+    --ion-color-warning-rgb: 224, 146, 92;
+    --ion-color-warning-contrast: #22281b;
+    --ion-color-warning-contrast-rgb: 34, 40, 27;
+
+    --ion-color-danger: #e0925c;
+    --ion-color-danger-rgb: 224, 146, 92;
+    --ion-color-danger-contrast: #22281b;
+    --ion-color-danger-contrast-rgb: 34, 40, 27;
+    --ion-color-danger-shade: #ca804d;
+    --ion-color-danger-tint: #e8a475;
+
+    --ion-color-medium: #dcd3c4;
+    --ion-color-medium-rgb: 220, 211, 196;
+    --ion-color-medium-contrast: #22281b;
+    --ion-color-medium-contrast-rgb: 34, 40, 27;
+  }
+
+  /* Suporte automático com light-dark() */
+  @supports (color: light-dark(white, black)) {
+    --pardal-bg: light-dark(var(--pardal-bg-light), var(--pardal-bg-dark));
+    --pardal-surface: light-dark(var(--pardal-surface-light), var(--pardal-surface-dark));
+    --pardal-surface-inset: light-dark(var(--pardal-surface-inset-light), var(--pardal-surface-inset-dark));
+    --pardal-input-bg: light-dark(var(--pardal-input-bg-light), var(--pardal-input-bg-dark));
+    --pardal-input-focus: light-dark(var(--pardal-input-focus-light), var(--pardal-input-focus-dark));
+    --pardal-surface-hover: light-dark(var(--pardal-surface-hover-light), var(--pardal-surface-hover-dark));
+    --pardal-border: light-dark(var(--pardal-border-light), var(--pardal-border-dark));
+    --pardal-input-border: light-dark(var(--pardal-input-border-light), var(--pardal-input-border-dark));
+    --pardal-text: light-dark(var(--pardal-text-light), var(--pardal-text-dark));
+    --pardal-text-muted: light-dark(var(--pardal-text-muted-light), var(--pardal-text-muted-dark));
+    --pardal-accent: light-dark(var(--pardal-accent-light), var(--pardal-accent-dark));
+    --pardal-accent-text: light-dark(var(--pardal-accent-text-light), var(--pardal-accent-text-dark));
+    --pardal-highlight-bg: light-dark(var(--pardal-highlight-bg-light), var(--pardal-highlight-bg-dark));
+    --pardal-highlight-on-bg: light-dark(var(--pardal-highlight-text-on-bg-light), var(--pardal-highlight-text-on-bg-dark));
+    --pardal-danger-text: light-dark(var(--pardal-danger-text-light), var(--pardal-danger-text-dark));
+    --pardal-btn-primary-bg: light-dark(var(--pardal-btn-primary-bg-light), var(--pardal-btn-primary-bg-dark));
+    --pardal-btn-primary-hover: light-dark(var(--pardal-btn-primary-hover-light), var(--pardal-btn-primary-hover-dark));
+    --pardal-btn-primary-text: light-dark(var(--pardal-btn-primary-text-light), var(--pardal-btn-primary-text-dark));
+    --pardal-disabled-bg: light-dark(var(--pardal-disabled-bg-light), var(--pardal-disabled-bg-dark));
+    --pardal-disabled-text: light-dark(var(--pardal-disabled-text-light), var(--pardal-disabled-text-dark));
+  }
+}
+
+/* Modo de alto contraste */
+@media (forced-colors: active) {
+  :root {
+    --pardal-border: CanvasText;
+    --pardal-input-border: CanvasText;
+    --pardal-accent: Highlight;
+  }
+}

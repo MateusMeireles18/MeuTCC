@@ -1,0 +1,62 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/principal"></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      Cadastro
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Cadastro</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <div id="campos">
+    <ion-item>
+      <ion-input [(ngModel)]="moto" id="description" type="text" placeholder="Moto / Descrição" label="Moto" labelPlacement="floating"></ion-input>
+    </ion-item>
+    
+    @for (item of itens; track $index) {
+      <div class="item-grupo">
+        <div class="item-grupo-topo">
+          <ion-badge color="primary" style="font-size: 0.85rem; padding: 5px 12px; border-radius: 12px; font-weight: 600;">
+            R$ {{ ((item.quantidade || 0) * (item.preco || 0)) | number:'1.2-2' }}
+          </ion-badge>
+
+          @if (itens.length > 1) {
+            <ion-button fill="clear" color="danger" size="small" (click)="removerItem($index)" style="margin: 0; min-height: 24px;">
+              <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+            </ion-button>
+          }
+        </div>
+        
+        <ion-item>
+          <ion-input [(ngModel)]="item.quantidade" type="number" placeholder="Quantidade" label="Quantidade" labelPlacement="floating"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-input type="text" [(ngModel)]="item.nome" placeholder="Nome" label="Nome" labelPlacement="floating"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-input type="number" [(ngModel)]="item.preco" step="0.01" placeholder="Preço" label="Preço" labelPlacement="floating"></ion-input>
+        </ion-item>
+      </div>
+    }
+  </div>
+
+
+  <ion-button fill="clear" expand="block" (click)="adicionarItem()" style="margin-top: 8px;">
+    <ion-icon name="add-outline" slot="start"></ion-icon>
+    Adicionar Orçamento
+  </ion-button> 
+
+  <ion-button expand="block" style="margin-top: 20px;" (click)="enviar()" [disabled]="salvando">
+    {{ salvando ? 'Salvando...' : 'Salvar' }}
+  </ion-button>
+</ion-content>

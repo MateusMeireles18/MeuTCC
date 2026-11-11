@@ -1,0 +1,49 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Cadastros</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding" scrollY="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Cadastros</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-button expand="block" (click)="novo()">Novo Cadastro</ion-button>
+
+  @if (carregando) {
+    <div style="text-align: center; margin-top: 32px;">
+      <ion-spinner name="crescent" color="primary"></ion-spinner>
+      <p style="color: var(--ion-color-medium);">Carregando orçamentos...</p>
+    </div>
+  } @else {
+    <div class="lista-cadastros">
+      @for (cadastro of cadastros; track cadastro.id || $index) {
+        <ion-card (click)="abrir(cadastro.id)" button="true">
+          <ion-card-header style="display: flex; justify-content: space-between; align-items: center; padding-right: 8px;">
+            <div>
+              <ion-card-title>{{ cadastro.moto || 'Sem Moto' }}</ion-card-title>
+              <div style="display: flex; gap: 6px; margin-top: 6px; align-items: center;">
+                <ion-badge color="primary" style="font-size: 0.78rem; padding: 4px 8px; border-radius: 10px;">
+                  {{ cadastro.itens.length || 0 }} orç.
+                </ion-badge>
+                <ion-badge color="success" style="font-size: 0.85rem; padding: 4px 10px; border-radius: 12px; font-weight: 700;">
+                  Total: R$ {{ getTotal(cadastro) | number:'1.2-2' }}
+                </ion-badge>
+              </div>
+            </div>
+            <ion-button color="danger" fill="clear" (click)="excluir($event, cadastro.id)" style="margin: 0; --padding-start: 8px; --padding-end: 8px;">
+              Excluir
+            </ion-button>
+          </ion-card-header>
+        </ion-card>
+      } @empty {
+        <div style="text-align: center; margin-top: 32px; color: var(--ion-color-medium);">
+          <p>Nenhum cadastro encontrado.</p>
+        </div>
+      }
+    </div>
+  }
+</ion-content>

@@ -1,0 +1,111 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+/* Core CSS required for Ionic components to work properly */
+@import "@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import "@ionic/angular/css/display.css";
+
+/* Optional CSS utils that can be commented out */
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/float-elements.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
+@import "@ionic/angular/css/flex-utils.css";
+
+/**
+ * Ionic Dark Mode
+ * -----------------------------------------------------
+ * For more info, please see:
+ * https://ionicframework.com/docs/theming/dark-mode
+ */
+
+/* @import "@ionic/angular/css/palettes/dark.always.css"; */
+/* @import "@ionic/angular/css/palettes/dark.class.css"; */
+@import '@ionic/angular/css/palettes/dark.system.css';
+
+/* Estilos globais de tipografia e cores */
+html,
+body {
+  font-family: var(--pardal-font-sans);
+  line-height: 1.5;
+  background-color: var(--ion-background-color);
+  color: var(--ion-text-color);
+}
+
+/* Títulos com fonte display */
+ion-title,
+ion-card-title {
+  --ion-font-family: var(--pardal-font-display);
+  --color: var(--ion-text-color);
+  color: var(--ion-text-color);
+  font-family: var(--pardal-font-display);
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+  text-wrap: balance;
+}
+
+/* Fonte padrão do corpo e componentes */
+ion-content,
+ion-item,
+ion-input,
+ion-label,
+ion-button,
+ion-badge,
+p {
+  font-family: var(--pardal-font-sans);
+}
+
+ion-button {
+  font-weight: 700;
+}
+
+ion-badge {
+  font-variant-numeric: tabular-nums;
+}
+
+ion-toolbar {
+  --background: var(--ion-toolbar-background);
+  --color: var(--ion-toolbar-color);
+  --border-color: var(--pardal-border);
+}
+
+ion-back-button {
+  --color: var(--pardal-accent-text);
+}
+
+/* Estilização dos alertas */
+ion-alert {
+  --background: var(--ion-card-background);
+
+  .alert-title {
+    font-family: var(--pardal-font-display);
+    font-weight: 400;
+    color: var(--ion-text-color);
+  }
+
+  .alert-message {
+    font-family: var(--pardal-font-sans);
+    color: var(--pardal-text-muted);
+    line-height: 1.5;
+  }
+
+  .alert-button {
+    font-family: var(--pardal-font-sans);
+    font-weight: 700;
+    color: var(--pardal-accent-text);
+  }
+}

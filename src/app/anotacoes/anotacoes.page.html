@@ -1,0 +1,21 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Anotações</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">anotacoes</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <div id="anotacoes">
+    <ion-item>
+      <ion-label position="stacked">Notas</ion-label>
+      <ion-input type="text" [(ngModel)]="notas" placeholder="Suas anotações" id="notas"></ion-input>
+    </ion-item>
+    <ion-button expand="block" (click)="salvarAnotacoes()">Salvar</ion-button>
+  </div>
+</ion-content>

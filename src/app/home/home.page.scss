@@ -1,0 +1,94 @@
+#campos {
+  background: var(--ion-card-background);
+  border-radius: 20px;
+  padding: 18px 16px;
+  margin: 16px auto;
+  max-width: 520px;
+  box-shadow: var(--pardal-shadow);
+  border: 1px solid var(--pardal-border);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  .item-grupo {
+    position: relative;
+    margin-top: 4px;
+    padding: 14px;
+    background: var(--pardal-surface-inset);
+    border-radius: 16px;
+    border: 1px solid var(--pardal-border);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .item-grupo-topo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2px;
+  }
+
+  ion-item {
+    --background: var(--pardal-input-bg);
+    --color: var(--ion-text-color);
+    --border-radius: 14px;
+    --padding-start: 14px;
+    --padding-end: 14px;
+    --highlight-color-focused: var(--pardal-accent);
+    border-radius: 14px;
+    border: 1px solid var(--pardal-input-border);
+    transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+
+    &:hover {
+      --background: var(--pardal-surface-hover);
+    }
+
+    &:focus-within {
+      --background: var(--pardal-input-focus);
+      border-color: var(--pardal-accent);
+      box-shadow: 0 0 0 3px rgba(86, 99, 63, 0.18);
+    }
+  }
+
+  ion-input {
+    font-size: 1rem;
+    font-weight: 500;
+  }
+}
+
+ion-button:not([fill="clear"]) {
+  --background: var(--pardal-btn-primary-bg);
+  --background-hover: var(--pardal-btn-primary-hover);
+  --background-activated: var(--pardal-btn-primary-hover);
+  --color: var(--pardal-btn-primary-text);
+  --border-radius: 16px;
+  --box-shadow: var(--pardal-shadow-accent);
+  max-width: 520px;
+  margin: 20px auto 0 auto;
+  display: block;
+  letter-spacing: 0.03em;
+  min-block-size: 3.25rem;
+  transition: transform 0.15s ease;
+
+  &:active:not([disabled]) {
+    transform: scale(0.98);
+  }
+
+  &[disabled] {
+    --background: var(--pardal-disabled-bg);
+    --color: var(--pardal-disabled-text);
+    --box-shadow: none;
+    opacity: 0.78;
+  }
+}
+
+ion-button[fill="clear"][expand="block"] {
+  --color: var(--pardal-accent-text);
+  --border-radius: 16px;
+  --background-hover: rgba(86, 99, 63, 0.08);
+  max-width: 520px;
+  margin: 8px auto 0 auto;
+  border: 1px dashed var(--pardal-accent);
+  min-block-size: 3rem;
+}
