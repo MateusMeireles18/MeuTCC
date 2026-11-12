@@ -25,7 +25,7 @@ public class Budget
         {
             Id = Guid.NewGuid(),
             Title = title,
-            Description = description,
+            Description = description ?? string.Empty,
             Amount = amount,
             CreatedAt = DateTime.UtcNow
         };
@@ -40,7 +40,7 @@ public class Budget
 
         // Atualiza os dados e registra o timestamp de alteração
         Title = title;
-        Description = description;
+        Description = description ?? string.Empty;
         Amount = amount;
         UpdateAt = DateTime.UtcNow;
     }

@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,9 +32,26 @@ builder.Services.AddCors(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Persistência com Entity Framework Core e SQLite
+// Usa PostgreSQL quando houver connection string na nuvem e SQLite localmente
+var rawConnection = Environment.GetEnvironmentVariable("DATABASE_URL")
+    ?? builder.Configuration.GetConnectionString("DefaultConnection");
+
+var usePostgres = !string.IsNullOrWhiteSpace(rawConnection) &&
+    (rawConnection.StartsWith("postgres://", StringComparison.OrdinalIgnoreCase) ||
+     rawConnection.StartsWith("postgresql://", StringComparison.OrdinalIgnoreCase) ||
+     rawConnection.Contains("Host=", StringComparison.OrdinalIgnoreCase));
+
 builder.Services.AddDbContext<BudgetsDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection") ?? "Data Source=budget.db"));
+{
+    if (usePostgres)
+    {
+        options.UseNpgsql(NormalizePostgresConnectionString(rawConnection!));
+    }
+    else
+    {
+        options.UseSqlite(rawConnection ?? "Data Source=budget.db");
+    }
+});
 
 // Injeção de dependências
 builder.Services.AddScoped<IBudgetRepository, BudgetRepository>();
@@ -45,11 +63,18 @@ builder.Services.AddValidatorsFromAssemblyContaining<CreateBudgetRequestValidato
 
 var app = builder.Build();
 
-// Aplica migrations pendentes na inicialização
+// Garante a criação das tabelas ou aplicação de migrations pendentes ao iniciar
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<BudgetsDbContext>();
-    db.Database.Migrate();
+    if (usePostgres)
+    {
+        db.Database.EnsureCreated();
+    }
+    else
+    {
+        db.Database.Migrate();
+    }
 }
 
 app.UseSwagger();
@@ -60,3 +85,29 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+static string NormalizePostgresConnectionString(string connectionString)
+{
+    if (!connectionString.StartsWith("postgres://", StringComparison.OrdinalIgnoreCase) &&
+        !connectionString.StartsWith("postgresql://", StringComparison.OrdinalIgnoreCase))
+    {
+        return connectionString;
+    }
+
+    var uri = new Uri(connectionString);
+    var userInfo = uri.UserInfo.Split(':', 2);
+
+    var npgsqlBuilder = new NpgsqlConnectionStringBuilder
+    {
+        Host = uri.Host,
+        Port = uri.Port > 0 ? uri.Port : 5432,
+        Database = uri.AbsolutePath.TrimStart('/'),
+        Username = Uri.UnescapeDataString(userInfo[0]),
+        Password = userInfo.Length > 1 ? Uri.UnescapeDataString(userInfo[1]) : string.Empty,
+        SslMode = uri.Query.Contains("sslmode=disable", StringComparison.OrdinalIgnoreCase)
+            ? SslMode.Disable
+            : SslMode.Require
+    };
+
+    return npgsqlBuilder.ConnectionString;
+}
