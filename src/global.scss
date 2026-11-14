@@ -109,3 +109,220 @@ ion-alert {
     color: var(--pardal-accent-text);
   }
 }
+
+/* ==========================================================================
+   Estilos da Ordem de Serviço / Comprovante (Oficina Pardal)
+   ========================================================================== */
+.documento-os {
+  background: #ffffff;
+  color: #1a202c;
+  padding: 24px;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  font-family: var(--pardal-font-sans);
+  max-width: 680px;
+  margin: 0 auto;
+
+  .os-cabecalho {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-bottom: 16px;
+    border-bottom: 2px solid #2f3626;
+
+    .os-marca {
+      h2 {
+        font-family: var(--pardal-font-display);
+        font-size: 1.5rem;
+        margin: 0;
+        color: #2f3626;
+      }
+      p {
+        margin: 2px 0 0 0;
+        font-size: 0.8rem;
+        color: #718096;
+      }
+    }
+
+    .os-info-topo {
+      text-align: right;
+
+      .os-tag-tipo {
+        display: block;
+        font-size: 0.72rem;
+        font-weight: 800;
+        background: #56633f;
+        color: #ffffff;
+        padding: 3px 8px;
+        border-radius: 6px;
+      }
+
+      .os-data {
+        display: block;
+        font-size: 0.75rem;
+        color: #718096;
+        margin-top: 4px;
+      }
+    }
+  }
+
+  .os-grid-dados {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0;
+    padding: 12px;
+    background: #f7fafc;
+    border-radius: 10px;
+    border: 1px solid #edf2f7;
+
+    .os-bloco {
+      font-size: 0.84rem;
+
+      .os-bloco-titulo {
+        display: block;
+        font-weight: 800;
+        font-size: 0.72rem;
+        color: #4a5568;
+        margin-bottom: 6px;
+      }
+
+      .os-dado-linha {
+        margin: 3px 0;
+        color: #2d3748;
+      }
+    }
+  }
+
+  .os-tabela {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: 0.84rem;
+
+    th {
+      background: #edf2f7;
+      color: #2d3748;
+      font-weight: 700;
+      padding: 8px 10px;
+      text-align: left;
+      border-bottom: 2px solid #cbd5e0;
+      font-size: 0.76rem;
+      text-transform: uppercase;
+    }
+
+    td {
+      padding: 8px 10px;
+      border-bottom: 1px solid #e2e8f0;
+      color: #2d3748;
+    }
+
+    .os-tipo-pill {
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 6px;
+      background: #e2e8f0;
+      color: #4a5568;
+
+      &.servico {
+        background: #feebc8;
+        color: #b2622d;
+      }
+    }
+  }
+
+  .os-totais {
+    margin-left: auto;
+    max-width: 260px;
+    margin-top: 10px;
+    padding: 10px;
+    background: #f7fafc;
+    border-radius: 10px;
+    border: 1px solid #edf2f7;
+
+    .os-total-linha {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.84rem;
+      padding: 3px 0;
+      color: #4a5568;
+
+      &.os-total-final {
+        margin-top: 6px;
+        padding-top: 8px;
+        border-top: 2px solid #2f3626;
+        font-weight: 800;
+        font-size: 1rem;
+        color: #2f3626;
+      }
+    }
+  }
+
+  .os-garantia {
+    margin-top: 20px;
+    padding: 10px 12px;
+    background: #fffaf0;
+    border-left: 3px solid #b2622d;
+    border-radius: 6px;
+
+    p {
+      margin: 0;
+      font-size: 0.75rem;
+      color: #744210;
+      line-height: 1.4;
+    }
+  }
+
+  .os-assinaturas {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    margin-top: 40px;
+    padding-top: 10px;
+
+    .assinatura-bloco {
+      text-align: center;
+
+      .linha-assinatura {
+        border-top: 1px solid #a0aec0;
+        margin-bottom: 6px;
+      }
+
+      span {
+        font-size: 0.78rem;
+        color: #4a5568;
+        font-weight: 600;
+      }
+    }
+  }
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  #documento-os,
+  #documento-os * {
+    visibility: visible;
+  }
+
+  #documento-os {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    max-width: 100%;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+  }
+
+  .os-acoes-impressao,
+  ion-header,
+  ion-toolbar {
+    display: none !important;
+  }
+}

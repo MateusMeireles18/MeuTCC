@@ -4,7 +4,7 @@
       <ion-back-button defaultHref="/principal"></ion-back-button>
     </ion-buttons>
     <ion-title>
-      Cadastro
+      {{ isEditing ? 'Editar Orçamento' : 'Novo Orçamento' }}
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -12,51 +12,194 @@
 <ion-content [fullscreen]="true" class="ion-padding">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Cadastro</ion-title>
+      <ion-title size="large">{{ isEditing ? 'Editar Orçamento' : 'Novo Orçamento' }}</ion-title>
     </ion-toolbar>
   </ion-header>
 
   <div id="campos">
+    <!-- Seção do Veículo -->
+    <div class="secao-titulo">
+      <span>Identificação da Moto</span>
+    </div>
+
     <ion-item>
-      <ion-input [(ngModel)]="moto" id="description" type="text" placeholder="Moto / Descrição" label="Moto" labelPlacement="floating"></ion-input>
+      <ion-input
+        [(ngModel)]="moto"
+        id="moto"
+        type="text"
+        placeholder="Ex.: Honda CG 160 Titan"
+        label="Modelo da Moto *"
+        labelPlacement="floating"
+      ></ion-input>
     </ion-item>
-    
+
+    <ion-item>
+      <ion-input
+        [(ngModel)]="placa"
+        (ionInput)="formatarPlaca()"
+        id="placa"
+        type="text"
+        placeholder="Ex.: ABC-1234 ou BRA2E19"
+        label="Placa do Veículo"
+        labelPlacement="floating"
+        maxlength="8"
+      ></ion-input>
+    </ion-item>
+
+    <!-- Seção do Cliente -->
+    <div class="secao-titulo" style="margin-top: 8px;">
+      <span>Dados do Cliente</span>
+    </div>
+
+    <ion-item>
+      <ion-input
+        [(ngModel)]="cliente"
+        id="cliente"
+        type="text"
+        placeholder="Nome do proprietário"
+        label="Nome do Cliente"
+        labelPlacement="floating"
+      ></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-input
+        [(ngModel)]="telefone"
+        id="telefone"
+        type="tel"
+        placeholder="Ex.: (11) 98765-4321"
+        label="WhatsApp / Telefone"
+        labelPlacement="floating"
+      ></ion-input>
+    </ion-item>
+
+    <!-- Seção de Status -->
+    <div class="secao-titulo" style="margin-top: 8px;">
+      <span>Status do Serviço</span>
+    </div>
+
+    <div class="status-selector">
+      <ion-segment [(ngModel)]="status" mode="ios">
+        <ion-segment-button value="Pendente">
+          <ion-label>🟡 Pendente</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="Aprovado">
+          <ion-label>🟢 Aprovado</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="Concluido">
+          <ion-label>✔️ Concluído</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </div>
+
+    <!-- Seção de Itens (Peças e Serviços) -->
+    <div class="secao-titulo" style="margin-top: 14px; display: flex; justify-content: space-between; align-items: center;">
+      <span>Itens e Mão de Obra</span>
+      <span class="itens-contador">{{ itens.length }} {{ itens.length === 1 ? 'item' : 'itens' }}</span>
+    </div>
+
     @for (item of itens; track $index) {
       <div class="item-grupo">
         <div class="item-grupo-topo">
-          <ion-badge color="primary" style="font-size: 0.85rem; padding: 5px 12px; border-radius: 12px; font-weight: 600;">
-            R$ {{ ((item.quantidade || 0) * (item.preco || 0)) | number:'1.2-2' }}
-          </ion-badge>
+          <div class="tipo-chips">
+            <button
+              type="button"
+              class="chip-btn"
+              [class.ativo]="(item.tipo || 'peca') === 'peca'"
+              (click)="mudarTipoItem(item, 'peca')"
+            >
+              <ion-icon name="cube-outline"></ion-icon> Peça
+            </button>
+            <button
+              type="button"
+              class="chip-btn"
+              [class.ativo]="item.tipo === 'servico'"
+              (click)="mudarTipoItem(item, 'servico')"
+            >
+              <ion-icon name="construct-outline"></ion-icon> Serviço
+            </button>
+          </div>
 
-          @if (itens.length > 1) {
-            <ion-button fill="clear" color="danger" size="small" (click)="removerItem($index)" style="margin: 0; min-height: 24px;">
-              <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
-            </ion-button>
-          }
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <ion-badge color="primary" class="badge-item-total">
+              R$ {{ ((item.quantidade || 0) * (item.preco || 0)) | number:'1.2-2' }}
+            </ion-badge>
+
+            @if (itens.length > 1) {
+              <ion-button fill="clear" color="danger" size="small" (click)="removerItem($index)" class="btn-lixeira">
+                <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+              </ion-button>
+            }
+          </div>
         </div>
-        
-        <ion-item>
-          <ion-input [(ngModel)]="item.quantidade" type="number" placeholder="Quantidade" label="Quantidade" labelPlacement="floating"></ion-input>
-        </ion-item>
 
         <ion-item>
-          <ion-input type="text" [(ngModel)]="item.nome" placeholder="Nome" label="Nome" labelPlacement="floating"></ion-input>
+          <ion-input
+            type="text"
+            [(ngModel)]="item.nome"
+            [placeholder]="item.tipo === 'servico' ? 'Ex.: Troca de óleo e filtro' : 'Ex.: Óleo Motul 10w40'"
+            [label]="item.tipo === 'servico' ? 'Descrição do Serviço' : 'Nome da Peça'"
+            labelPlacement="floating"
+          ></ion-input>
         </ion-item>
 
-        <ion-item>
-          <ion-input type="number" [(ngModel)]="item.preco" step="0.01" placeholder="Preço" label="Preço" labelPlacement="floating"></ion-input>
-        </ion-item>
+        <div class="linha-valores">
+          <ion-item class="campo-qtd">
+            <ion-input
+              [(ngModel)]="item.quantidade"
+              type="number"
+              placeholder="1"
+              label="Qtd."
+              labelPlacement="floating"
+              min="1"
+            ></ion-input>
+          </ion-item>
+
+          <ion-item class="campo-preco">
+            <ion-input
+              [(ngModel)]="item.preco"
+              type="number"
+              step="0.01"
+              placeholder="0,00"
+              label="Preço Unit. (R$)"
+              labelPlacement="floating"
+            ></ion-input>
+          </ion-item>
+        </div>
       </div>
     }
+
+    <!-- Botões para adicionar -->
+    <div class="acoes-adicionar">
+      <ion-button fill="clear" size="small" (click)="adicionarItem('peca')" class="btn-add-peca">
+        <ion-icon name="add-outline" slot="start"></ion-icon>
+        Adicionar Peça
+      </ion-button>
+
+      <ion-button fill="clear" size="small" (click)="adicionarItem('servico')" class="btn-add-servico">
+        <ion-icon name="add-outline" slot="start"></ion-icon>
+        Adicionar Mão de Obra
+      </ion-button>
+    </div>
+
+    <!-- Resumo dos Totais -->
+    <div class="resumo-financeiro">
+      <div class="resumo-linha">
+        <span class="resumo-label">Peças:</span>
+        <span class="resumo-valor">R$ {{ getTotalPecas() | number:'1.2-2' }}</span>
+      </div>
+      <div class="resumo-linha">
+        <span class="resumo-label">Mão de Obra:</span>
+        <span class="resumo-valor">R$ {{ getTotalServicos() | number:'1.2-2' }}</span>
+      </div>
+      <div class="resumo-linha total-destaque">
+        <span class="resumo-label">Total Geral:</span>
+        <span class="resumo-valor-total">R$ {{ getTotalGeral() | number:'1.2-2' }}</span>
+      </div>
+    </div>
   </div>
 
-
-  <ion-button fill="clear" expand="block" (click)="adicionarItem()" style="margin-top: 8px;">
-    <ion-icon name="add-outline" slot="start"></ion-icon>
-    Adicionar Orçamento
-  </ion-button> 
-
-  <ion-button expand="block" style="margin-top: 20px;" (click)="enviar()" [disabled]="salvando">
-    {{ salvando ? 'Salvando...' : 'Salvar' }}
+  <ion-button expand="block" (click)="enviar()" [disabled]="salvando" class="btn-salvar">
+    {{ salvando ? 'Salvando...' : (isEditing ? 'Atualizar Orçamento' : 'Salvar Orçamento') }}
   </ion-button>
 </ion-content>

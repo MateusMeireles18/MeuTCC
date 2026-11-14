@@ -1,49 +1,240 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>Cadastros</ion-title>
+    <ion-title>Oficina Pardal</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding" scrollY="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Cadastros</ion-title>
+      <ion-title size="large">Oficina Pardal</ion-title>
     </ion-toolbar>
   </ion-header>
 
-  <ion-button expand="block" (click)="novo()">Novo Cadastro</ion-button>
+  <ion-button expand="block" (click)="novo()" class="btn-novo-orcamento">
+    <ion-icon name="add-outline" slot="start"></ion-icon>
+    Novo Orçamento
+  </ion-button>
 
   @if (carregando) {
-    <div style="text-align: center; margin-top: 32px;">
+    <div class="estado-vazio">
       <ion-spinner name="crescent" color="primary"></ion-spinner>
-      <p style="color: var(--ion-color-medium);">Carregando orçamentos...</p>
+      <p>Carregando orçamentos...</p>
     </div>
   } @else {
     <div class="lista-cadastros">
       @for (cadastro of cadastros; track cadastro.id || $index) {
-        <ion-card (click)="abrir(cadastro.id)" button="true">
-          <ion-card-header style="display: flex; justify-content: space-between; align-items: center; padding-right: 8px;">
-            <div>
-              <ion-card-title>{{ cadastro.moto || 'Sem Moto' }}</ion-card-title>
-              <div style="display: flex; gap: 6px; margin-top: 6px; align-items: center;">
-                <ion-badge color="primary" style="font-size: 0.78rem; padding: 4px 8px; border-radius: 10px;">
-                  {{ cadastro.itens.length || 0 }} orç.
-                </ion-badge>
-                <ion-badge color="success" style="font-size: 0.85rem; padding: 4px 10px; border-radius: 12px; font-weight: 700;">
-                  Total: R$ {{ getTotal(cadastro) | number:'1.2-2' }}
-                </ion-badge>
+        <ion-card (click)="abrir(cadastro.id)" button="true" class="card-orcamento">
+          <ion-card-header>
+            <!-- Topo do Card: Placa e Status -->
+            <div class="card-topo">
+              <div class="placa-badge-container">
+                @if (cadastro.placa) {
+                  <span class="placa-veiculo">{{ cadastro.placa }}</span>
+                } @else {
+                  <span class="placa-veiculo sem-placa">SEM PLACA</span>
+                }
+              </div>
+
+              <span class="badge-status" [ngClass]="getStatusClass(cadastro.status)">
+                {{ getStatusLabel(cadastro.status) }}
+              </span>
+            </div>
+
+            <!-- Título: Modelo da Moto -->
+            <ion-card-title class="moto-titulo">
+              {{ cadastro.moto || 'Sem Moto' }}
+            </ion-card-title>
+
+            <!-- Dados do Cliente -->
+            @if (cadastro.cliente || cadastro.telefone) {
+              <div class="cliente-info">
+                @if (cadastro.cliente) {
+                  <span class="cliente-item">
+                    <ion-icon name="person-outline"></ion-icon> {{ cadastro.cliente }}
+                  </span>
+                }
+                @if (cadastro.telefone) {
+                  <span class="cliente-item">
+                    <ion-icon name="call-outline"></ion-icon> {{ cadastro.telefone }}
+                  </span>
+                }
+              </div>
+            }
+
+            <!-- Valores: Peças, Serviços e Total Geral -->
+            <div class="card-valores">
+              <div class="valores-detalhe">
+                <span>Peças: <strong>R$ {{ getTotalPecas(cadastro) | number:'1.2-2' }}</strong></span>
+                <span class="divisor">•</span>
+                <span>Serviços: <strong>R$ {{ getTotalServicos(cadastro) | number:'1.2-2' }}</strong></span>
+              </div>
+
+              <div class="valor-total-destaque">
+                <span class="total-rotulo">Total:</span>
+                <span class="total-numero">R$ {{ getTotal(cadastro) | number:'1.2-2' }}</span>
               </div>
             </div>
-            <ion-button color="danger" fill="clear" (click)="excluir($event, cadastro.id)" style="margin: 0; --padding-start: 8px; --padding-end: 8px;">
-              Excluir
-            </ion-button>
+
+            <!-- Ações Rápidas no Card -->
+            <div class="card-acoes" (click)="$event.stopPropagation()">
+              <button
+                type="button"
+                class="acao-btn acao-whatsapp"
+                (click)="enviarWhatsApp($event, cadastro)"
+                title="Enviar no WhatsApp"
+              >
+                <ion-icon name="logo-whatsapp"></ion-icon>
+                <span>WhatsApp</span>
+              </button>
+
+              <button
+                type="button"
+                class="acao-btn acao-print"
+                (click)="abrirComprovante($event, cadastro)"
+                title="Imprimir Ordem de Serviço"
+              >
+                <ion-icon name="print-outline"></ion-icon>
+                <span>Ordem de Serviço</span>
+              </button>
+
+              <button
+                type="button"
+                class="acao-btn acao-excluir"
+                (click)="excluir($event, cadastro.id)"
+                title="Excluir Orçamento"
+              >
+                <ion-icon name="trash-outline"></ion-icon>
+              </button>
+            </div>
           </ion-card-header>
         </ion-card>
       } @empty {
-        <div style="text-align: center; margin-top: 32px; color: var(--ion-color-medium);">
-          <p>Nenhum cadastro encontrado.</p>
+        <div class="estado-vazio">
+          <p>Nenhum orçamento cadastrado ainda.</p>
+          <ion-button fill="outline" size="small" (click)="novo()">Criar o primeiro</ion-button>
         </div>
       }
     </div>
   }
+
+  <!-- Modal de Ordem de Serviço / Impressão (PDF) -->
+  <ion-modal [isOpen]="modalComprovanteAberto" (didDismiss)="fecharComprovante()">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Comprovante de O.S.</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="fecharComprovante()">
+              <ion-icon name="close-outline"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+
+      <ion-content class="ion-padding" id="folha-impressao-container">
+        @if (cadastroSelecionado) {
+          <div class="documento-os" id="documento-os">
+            <!-- Cabeçalho Oficial da Oficina -->
+            <div class="os-cabecalho">
+              <div class="os-marca">
+                <h2>OFICINA PARDAL</h2>
+                <p>Manutenção e Customização de Motocicletas</p>
+              </div>
+              <div class="os-info-topo">
+                <span class="os-tag-tipo">ORDEM DE SERVIÇO / ORÇAMENTO</span>
+                <span class="os-data">Emissão: {{ dataAtual | date:'dd/MM/yyyy HH:mm' }}</span>
+              </div>
+            </div>
+
+            <!-- Dados do Veículo e Cliente -->
+            <div class="os-grid-dados">
+              <div class="os-bloco">
+                <span class="os-bloco-titulo">DADOS DO VEÍCULO</span>
+                <div class="os-dado-linha"><strong>Moto:</strong> {{ cadastroSelecionado.moto || 'Não informado' }}</div>
+                <div class="os-dado-linha"><strong>Placa:</strong> {{ cadastroSelecionado.placa || 'Sem placa' }}</div>
+                <div class="os-dado-linha"><strong>Status:</strong> {{ cadastroSelecionado.status || 'Pendente' }}</div>
+              </div>
+
+              <div class="os-bloco">
+                <span class="os-bloco-titulo">DADOS DO CLIENTE</span>
+                <div class="os-dado-linha"><strong>Cliente:</strong> {{ cadastroSelecionado.cliente || 'Consumidor' }}</div>
+                <div class="os-dado-linha"><strong>WhatsApp:</strong> {{ cadastroSelecionado.telefone || 'Não informado' }}</div>
+              </div>
+            </div>
+
+            <!-- Tabela de Peças e Serviços -->
+            <table class="os-tabela">
+              <thead>
+                <tr>
+                  <th style="width: 70px;">Tipo</th>
+                  <th>Descrição</th>
+                  <th style="width: 50px; text-align: center;">Qtd</th>
+                  <th style="width: 85px; text-align: right;">Unit. (R$)</th>
+                  <th style="width: 95px; text-align: right;">Subtotal</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (item of cadastroSelecionado.itens; track $index) {
+                  <tr>
+                    <td>
+                      <span class="os-tipo-pill" [class.servico]="item.tipo === 'servico'">
+                        {{ item.tipo === 'servico' ? 'Serviço' : 'Peça' }}
+                      </span>
+                    </td>
+                    <td>{{ item.nome }}</td>
+                    <td style="text-align: center;">{{ item.quantidade }}</td>
+                    <td style="text-align: right;">{{ item.preco | number:'1.2-2' }}</td>
+                    <td style="text-align: right; font-weight: 600;">
+                      {{ ((item.quantidade || 0) * (item.preco || 0)) | number:'1.2-2' }}
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+
+            <!-- Resumo Financeiro da O.S. -->
+            <div class="os-totais">
+              <div class="os-total-linha">
+                <span>Subtotal Peças:</span>
+                <span>R$ {{ getTotalPecas(cadastroSelecionado) | number:'1.2-2' }}</span>
+              </div>
+              <div class="os-total-linha">
+                <span>Subtotal Mão de Obra:</span>
+                <span>R$ {{ getTotalServicos(cadastroSelecionado) | number:'1.2-2' }}</span>
+              </div>
+              <div class="os-total-linha os-total-final">
+                <span>VALOR TOTAL:</span>
+                <span>R$ {{ getTotal(cadastroSelecionado) | number:'1.2-2' }}</span>
+              </div>
+            </div>
+
+            <!-- Termo de Garantia -->
+            <div class="os-garantia">
+              <p><strong>Garantia Legal:</strong> 90 (noventa) dias para serviços e peças instaladas, conforme Art. 26 do Código de Defesa do Consumidor (Lei nº 8.078/90), a contar da data de entrega do veículo.</p>
+            </div>
+
+            <!-- Campo de Assinaturas -->
+            <div class="os-assinaturas">
+              <div class="assinatura-bloco">
+                <div class="linha-assinatura"></div>
+                <span>Oficina Pardal</span>
+              </div>
+              <div class="assinatura-bloco">
+                <div class="linha-assinatura"></div>
+                <span>Assinatura do Cliente</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="os-acoes-impressao">
+            <ion-button expand="block" (click)="imprimirComprovante()" class="btn-imprimir">
+              <ion-icon name="print-outline" slot="start"></ion-icon>
+              Imprimir / Salvar em PDF
+            </ion-button>
+          </div>
+        }
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 </ion-content>

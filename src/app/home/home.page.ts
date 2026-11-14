@@ -2,23 +2,72 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonHeader, IonToolbar, IonTitle, IonContent, IonInput, IonButton, IonItem, IonIcon, IonBadge, IonButtons, IonBackButton, ToastController, AlertController } from '@ionic/angular/standalone';
-import { Cadastro, CadastroService, ItemCadastro } from '../services/cadastro.service';
+import {
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonContent,
+  IonInput,
+  IonButton,
+  IonItem,
+  IonIcon,
+  IonBadge,
+  IonButtons,
+  IonBackButton,
+  IonSegment,
+  IonSegmentButton,
+  IonLabel,
+  ToastController,
+  AlertController
+} from '@ionic/angular/standalone';
+import { Cadastro, CadastroService, ItemCadastro, StatusOrcamento, TipoItem } from '../services/cadastro.service';
 import { addIcons } from 'ionicons';
-import { addOutline, trashOutline } from 'ionicons/icons';
+import {
+  addOutline,
+  trashOutline,
+  constructOutline,
+  cubeOutline,
+  checkmarkCircleOutline,
+  timeOutline,
+  alertCircleOutline,
+  personOutline,
+  callOutline
+} from 'ionicons/icons';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
-  imports: [CommonModule, FormsModule, IonHeader, IonToolbar, IonTitle, IonContent, IonInput, IonButton, IonItem, IonIcon, IonBadge, IonButtons, IonBackButton],
+  imports: [
+    CommonModule,
+    FormsModule,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonContent,
+    IonInput,
+    IonButton,
+    IonItem,
+    IonIcon,
+    IonBadge,
+    IonButtons,
+    IonBackButton,
+    IonSegment,
+    IonSegmentButton,
+    IonLabel
+  ],
 })
 export class HomePage implements OnInit {
   moto: string = '';
+  placa: string = '';
+  cliente: string = '';
+  telefone: string = '';
+  status: StatusOrcamento = 'Pendente';
+
   itens: ItemCadastro[] = [
-    { nome: '', quantidade: 1, preco: 0 }
+    { nome: '', quantidade: 1, preco: 0, tipo: 'peca' }
   ];
-  
+
   editId: string | null = null;
   isEditing: boolean = false;
   salvando: boolean = false;
@@ -30,7 +79,17 @@ export class HomePage implements OnInit {
     private toastCtrl: ToastController,
     private alertCtrl: AlertController
   ) {
-    addIcons({ addOutline, trashOutline });
+    addIcons({
+      addOutline,
+      trashOutline,
+      constructOutline,
+      cubeOutline,
+      checkmarkCircleOutline,
+      timeOutline,
+      alertCircleOutline,
+      personOutline,
+      callOutline
+    });
   }
 
   ngOnInit() {
@@ -41,10 +100,14 @@ export class HomePage implements OnInit {
       this.cadastroService.obter(this.editId).subscribe({
         next: (cadastro) => {
           if (cadastro) {
-            this.moto = cadastro.moto;
+            this.moto = cadastro.moto || '';
+            this.placa = cadastro.placa || '';
+            this.cliente = cadastro.cliente || '';
+            this.telefone = cadastro.telefone || '';
+            this.status = cadastro.status || 'Pendente';
             this.itens = cadastro.itens?.length
-              ? cadastro.itens.map(i => ({ ...i }))
-              : [{ nome: '', quantidade: 1, preco: 0 }];
+              ? cadastro.itens.map(i => ({ ...i, tipo: i.tipo || 'peca' }))
+              : [{ nome: '', quantidade: 1, preco: 0, tipo: 'peca' }];
           }
         },
         error: (err) => console.error('Erro ao obter orçamento da API:', err)
@@ -52,8 +115,14 @@ export class HomePage implements OnInit {
     }
   }
 
-  adicionarItem() {
-    this.itens.push({ nome: '', quantidade: 1, preco: 0 });
+  formatarPlaca() {
+    if (this.placa) {
+      this.placa = this.placa.toUpperCase().replace(/[^A-Z0-9-]/g, '');
+    }
+  }
+
+  adicionarItem(tipo: TipoItem = 'peca') {
+    this.itens.push({ nome: '', quantidade: 1, preco: 0, tipo });
   }
 
   removerItem(index: number) {
@@ -61,6 +130,26 @@ export class HomePage implements OnInit {
     if (this.itens.length === 0) {
       this.adicionarItem();
     }
+  }
+
+  mudarTipoItem(item: ItemCadastro, tipo: TipoItem) {
+    item.tipo = tipo;
+  }
+
+  getTotalPecas(): number {
+    return this.itens
+      .filter(i => (i.tipo || 'peca') === 'peca')
+      .reduce((acc, item) => acc + ((item.quantidade || 0) * (item.preco || 0)), 0);
+  }
+
+  getTotalServicos(): number {
+    return this.itens
+      .filter(i => i.tipo === 'servico')
+      .reduce((acc, item) => acc + ((item.quantidade || 0) * (item.preco || 0)), 0);
+  }
+
+  getTotalGeral(): number {
+    return this.itens.reduce((acc, item) => acc + ((item.quantidade || 0) * (item.preco || 0)), 0);
   }
 
   async mostrarToast(mensagem: string) {
@@ -84,12 +173,20 @@ export class HomePage implements OnInit {
 
   enviar() {
     const moto = this.moto.trim();
-    // Mantém apenas os itens preenchidos
-    const itensValidos = this.itens.filter(i => i.nome.trim() !== '' || i.preco !== null || i.quantidade !== null);
+    if (!moto) {
+      this.mostrarAlerta('Atenção', 'Informe o modelo da moto.');
+      return;
+    }
+
+    const itensValidos = this.itens.filter(i => (i.nome && i.nome.trim() !== '') || i.preco > 0);
     const itensParaSalvar = itensValidos.length > 0 ? itensValidos : this.itens;
 
     const cadastroFinal: Cadastro = {
-      moto: moto || 'Sem Moto',
+      moto,
+      placa: this.placa.trim().toUpperCase(),
+      cliente: this.cliente.trim(),
+      telefone: this.telefone.trim(),
+      status: this.status,
       itens: itensParaSalvar
     };
 
@@ -129,7 +226,11 @@ export class HomePage implements OnInit {
 
   private finalizar() {
     this.moto = '';
-    this.itens = [{ nome: '', quantidade: 1, preco: 0 }];
+    this.placa = '';
+    this.cliente = '';
+    this.telefone = '';
+    this.status = 'Pendente';
+    this.itens = [{ nome: '', quantidade: 1, preco: 0, tipo: 'peca' }];
     this.isEditing = false;
     this.editId = null;
     this.router.navigate(['/principal']);
